@@ -1,0 +1,1891 @@
+<!DOCTYPE html>
+<!-- saved from url=(0135)https://webmail.fun.ac.jp/cgi-bin/composer.cgi?winmode=1&mode=&mbox=&key=&reservepath=&to=&fromhtml=&newmode=&actiontype=&forward_mode= -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta http-equiv="Pragma" content="No-Cache">
+<meta http-equiv="Expires" content="Wed, 01-01-90 00:00:00 GMT">
+
+<title>Leading #1 Advanced eMail Solution - DEEPMail</title>
+<link rel="stylesheet" type="text/css" href="./mailsuitex.editor.min.css">
+<link rel="stylesheet" type="text/css" href="./jquery.autocomplete.css">
+<link rel="stylesheet" type="text/css" href="./mailsuitex.composer.min.css">
+<script type="text/javascript" src="./mailsuitex.editor.min.js"></script>
+<script type="text/javascript" src="./jquery.min.js"></script>
+<script type="text/javascript" src="./jquery.autocomplete.min.js"></script>
+<script type="text/javascript" src="./mailsuitex.composer.min.js"></script>
+<script type="text/javascript" src="./mailsuitex.common.min.js"></script>
+
+<style type="text/css">
+<!--
+
+#webfileTitle{width:100%;margin:0px;height:34px;font-size:12px;line-height:34px;text-indent:12px;border-bottom:1px solid #696969;font-weight:bold;background:url(../images/base/blue/sScroll_bg.gif);border-radius:4px 4px 0 0;}
+//-->
+</style>
+<!--[if IE 8]>
+<STYLE type="text/css">
+body{scrollbar-darkshadow-color: #ffffff;}
+</style>
+<![endif]-->
+<script language="javascript">
+<!--
+var deepEditor;
+var g_bOnUpload = false;
+var g_bAllowSend = true;
+var g_nAutoSaveTerm;
+var g_nAutoSaveExec;
+var UA = navigator.userAgent.toLowerCase();
+var arrRcptForm = ["to","cc","bcc","replyto_t"];
+
+var NEW_WIN = 1;
+
+var FROM_DISPLAY_ALIAS = "0";
+var USE_ATTACH_SIZE = "1";
+var MAX_ATTACH_SIZE = "10485760";
+var MAX_ATTACH_COUNT = "10";
+var USE_ATTACH_COUNT = "0";
+var ML_SESSION = 0;
+
+
+var COLOR = "#80baff";
+
+
+var FROM_EMAIL = "";
+
+var msgComposer = {
+	"2"  : "メール送信",
+	"15" : "個",
+	"59" : "自動保存中です。",
+	"60" : "割り当てられたメール容量を<br>超過したので、自動保存できません。",
+	"61" : "自動保存することができません。",
+	"62" : "割り当てられたメール容量を超過したので、“下書き”に保存することができません。",
+	"63" : "エラーが発生しました。<br>時間をおいて再度お試しください。",
+	"65" : "送信者氏名には[\'],[\"],[<],[>]は、使用できません。",
+	"change_text" : "テキストに切り替えると文字のフォントなど、<br>HTMLの書式は全て消えます。変更しますか？",
+	"error" : "エラー",
+	"alert" : "通知",
+	"confirm" : "確認",
+	"noitem" : "送信履歴がありません。",
+	"temp_upload_error" : "アップロードに失敗しました。確認後、再度アップロードしてください。",
+	"sent_error" : "送信時にエラーが発生しました。確認後、再度送信してください。",
+	"image_sign_error" : "テキスト形式ではイメージ署名を登録できません。",
+	"drag_msg" : "ここにファイルを置いてください。",
+	"cancel_q" : "作成中のメールを破棄しますか？",
+	"cancel_draft" : "下書きに保存",
+	"sc1" : "宛先のメールアドレスを入力してください。",
+	"sc2" : "件名がありません。\n件名なしでメールを送信しますか？",
+	"sc3" : "添付するファイルを選択してください。",
+	"sc4" : "添付できるファイル数の上限をご確認下さい。",
+	"sc5" : "添付できるファイル容量の上限をご確認下さい。",
+	"sc6" : "すでに登録されているファイルです。\n他のファイルを選択してください。",
+	"sc7" : "削除するファイルを選択してください。",
+	"sc9" : "すでに登録されているファイルです。\n他のファイルを選択してください。",
+	"sc10" : "添付ファイルの追加が正しく行われませんでした。\nもう一度お試しください。",
+	"sc11" : "他の画面に移動する際、作成したメールは［下書き］に保存されます。",
+	"sc12" : "予約送信の時間設定に誤りがあります。",
+	"sc13" : "下書きに保存しますか？",
+	"sc14" : "ファイルを選択してください。",
+	"sc15" : "メール作成画面を新規に開きますか？\n作成中のメールは保存されません。",
+	"sc16" : "メールアドレスの形式が正しくありません。\nもう一度入力してください。",
+	"sc17" : "選択した送信履歴を削除しますか？",
+	"sc18" : "削除が失敗しました。",
+	"sc19_add" : "追加するメールアドレスを選択してください。",
+	"sc19_delete" : "削除するメールアドレスを選択してください。",
+	"sc20" : "Reply-Toにはメールアドレスをひとつだけ入力可能です。",
+	"sc20_" : "Reply-Toのメールアドレスを変更しますか？",
+	"sc21" : "Reply-toの形式が正しくないか、複数のメールアドレスが入力されています。\nReply-Toには１つだけメールアドレスが入力可能です。\nもう一度入力してください。",
+	"callrcptdata_sc1" : "宛先",
+	"callrcptdata_sc2" : "Cc",
+	"callrcptdata_sc3" : "Bcc",
+	"callrcptdata_sc5" : "すでに",
+	"callrcptdata_sc6" : "に登録されているアドレスです。",
+	"callrcptdata_sc9" : "Reply-To",
+	"webfile_sendmail1" : "失敗"
+};
+var inputRcpt = new Set();
+$(window).load(function() {
+	$(document).on("click", ".uploadItem", OnClickUploadQItem);
+	$(document).on("click", "#fromPullDown", function() { _DisplayFromItem("auto"); });
+	$(document).on("click", ".fromItem",function() { SetFrom($(this).attr("email"), "full"); _DisplayFromItem("hide"); });
+
+	// rcpt handler
+	$(".rcptWrap").click(function() { $(this).find(":text").focus();});
+	$(document).on("click", ".rcptModify", _ModifyRcptPopup);
+	$(document).on("keyup", "#tempRcpt", {blur : false}, _ModifyRcptItem);
+	$(document).on("focusout", "#tempRcpt", {blur : true},  _ModifyRcptItem);
+	$(document).on("paste", ".rcptInputText", OnPasteRcptInptu);
+	$(document).on("keyup", ".rcptInputText", OnClickRcptInput);
+	$(document).on("keydown", ".rcptInputText", _handleAddRcptItem);
+	$(document).on("focusin", ".rcptInputText",_FocusRcpt);
+	$(document).on("click", ".rcptDel", OnClickRcptDel);
+	$(document).on("click", ".rcptPullDown", OnClickRcptPullDown);
+	$(document).on("click", "#easyPullDown > li", OnClickEasyAddressItem);
+	$(document).on("focusin", ".outline", function() { $(this).parent().css("border-color", COLOR); });
+	$(document).on("focusout", ".outline", function() { $(this).parent().css("border-color", "#aaaaaa"); });
+
+	$(".callrcpt").click(OnClickCallRcpt);
+	$("#composer").click(OnClickComposer);
+	$($("#htmlDoc").contents().get(0)).click(OnClickHtmlDoc);
+
+	// webfile
+	$(document).on("click", ".folderItem", GoSubFolder);
+
+	//drag & drop, multi upload handler
+	var dropDiv = document.getElementById('dropDiv');
+	if (window.File !== undefined) 
+	{
+		document.addEventListener('dragenter', handleDragEnter, false);
+		document.addEventListener('dragleave', handleDragLeave, false);
+		document.addEventListener('dragstart', handleDragStart, false);
+		document.addEventListener('dragover', handleDragOver, false);
+		dropDiv.addEventListener('drop', handleFileSelect, false);
+		$("#dragMsg > span").html("ここにファイルを置いてください。");
+		$("#dragMsg > span").css("background", "url(../images/base/gen/icon_attachfile.gif) no-repeat left 50%");
+	}
+
+  // safari 5.1.x has bugs.
+	//var bSupportMultiUpload = (UA.indexOf("safari") > 0 && UA.indexOf("chrome") < 0 && UA.indexOf("Version/5.1")) ? false : true;
+	//if (bSupportMultiUpload)
+	{
+		$("#multiUploadFile").prop("multiple","multiple");
+		$(document).on("click", "#attachbtn", AddAttach);
+	}
+
+
+	// init from
+	
+	InitFromInfo();
+	
+
+	//init editor
+	var msg = {"tagView" : "タグ確認"};
+	var option = {"path":"../extension/images/editor/"};
+	deepEditor = new DEEPEditor();
+	deepEditor.Init("jpn","text", msg, option);
+
+
+	//init sign,greet
+	var sign = $("#signkey").val();
+	if ( sign !== 0)
+		$("#sign-"+sign).show();
+
+	var cword = $("#cwordkey").val();
+	if ( cword !== 0)
+		$("#cword-"+cword).show();
+
+	//set default sign
+	
+	if ("" == "checked" && 1 > 0)
+		AddSign(true);
+
+	//set default macro
+	if ("" == "checked" && 1 > 0)
+		AddMacro(1);
+	
+
+	// init attach
+	InitAttach("");
+
+	//init reservation date
+	InitDate("","2020");
+
+	// init rcpt
+
+	for (var i=0; i<arrRcptForm.length-1; i++)
+	{
+		var rcpt = $("#_" + arrRcptForm[i]).val();
+		if ( rcpt != "")
+		{
+			if (arrRcptForm[i].indexOf("cc") >=0 && $(".trBcc").css("display") == "none")
+				Toggle('.trBcc',false,'img-trBcc');
+			_AddRcptItem(arrRcptForm[i], rcpt);
+		}
+	}
+
+	var rcpt = $("#_replyto_t").val();
+	if ( rcpt != "")
+	{
+		if ( $("#trReplyto").css("display") == "none" )
+			Toggle('#trReplyto',false,'img-trReplyto');
+
+		_AddRcptItem("replyto_t", rcpt);
+	}
+
+
+// init auto complete
+
+	var autocomplete_minchars=2;
+	var autocomplete_maxlist=10;
+	autocomplete_minchars=2;autocomplete_maxlist=10;
+
+	for (var i=0; i<arrRcptForm.length; i++)
+	{
+		$("#" + arrRcptForm[i]).autocomplete("autocomplete.cgi?mode=read",{
+				minChars: autocomplete_minchars,
+				max: autocomplete_maxlist,
+				width: 340,
+				multiple: false,
+				scrollHeight: 100,
+				additem: true
+			}
+		);
+	}
+
+	var now = new Date();
+	var date = now.getYear()+'-'+now.getMonth()+'-'+now.getDate()+'-'+now.getHours()+'-'+now.getMinutes()+'-'+now.getSeconds();
+	param = "date="+date;
+	$.get("autocomplete.cgi", param, function(result) {	}, 'json');
+
+
+	// init autosave
+
+	g_nAutoSaveTerm=  Number("1") * 1000 * 60;
+	setTimeout("AutoSave()",g_nAutoSaveTerm);
+	var asv_loading_width = 0;
+	$("span[asvwidth=1]").each(function (index) { asv_loading_width += $(this).width(); });
+	$("#asvLoading").width(asv_loading_width + 35);
+	g_nAutoSaveExec =1;
+
+
+	// resize easy address
+	var easyAddCount = "100";
+	var easyHeight = (easyAddCount == 0) ? 24 : (easyAddCount > 20) ? 400 : (20*easyAddCount);
+
+	if (UA.indexOf("trident") < 0 && UA.indexOf("opera") < 0 && $("#easyPullDown").height() > 298)
+		$("#easyPullDown").width($("#easyPullDown").width()+13);
+	
+	if (UA.indexOf("trident") < 0 && UA.indexOf("opera") < 0 && easyAddCount > 20)
+		$(".ea-email").width(273);
+
+	$("#easyAddressWrap").height(easyHeight+4);
+
+	OnReSizeWidth();
+	OnReSizeHeight();
+
+	// show reserve div 
+
+
+	// set default focus
+	$("#to").focus();
+
+	// set current menu
+	if(NEW_WIN==0)
+		parent.document.getElementById("strCurMenu").value = "composer";
+
+	$(document).on("click", "#easyToggle",function() { 
+		$(":checkbox[name=easyaddress]").prop("checked", $("#easyToggle").prop("checked")); 
+	});
+});
+
+$(window).resize(function() {OnReSizeWidth(); OnReSizeHeight();});
+$(window).unload(function() { if(NEW_WIN==0) parent.document.getElementById("strCurMenu").value = ""; });
+
+//-->
+</script>
+</head>
+<body style="">
+<div id="composer">
+<!-- mainform start-->
+<form id="mainform" name="mainform" method="post" action="https://webmail.fun.ac.jp/cgi-bin/mailcreator.cgi">
+<input type="hidden" name="actiontype" value="autosave">
+<input type="hidden" name="del_mail" value="">
+<input type="hidden" name="cancelCID" value="0">
+<input type="hidden" name="mode" value="">
+<input type="hidden" name="submode" value="">
+<input type="hidden" name="autosavecnt" value="1">
+<input type="hidden" name="autosavekey" value="asv1601875924819118">
+<input type="hidden" name="autosavemd5" value="88a64441e084b9d16cf75d2ff6e0ed5a">
+
+<input type="hidden" name="sto" value="exam@fun.ac.jp,">
+<input type="hidden" name="scc" value="">
+<input type="hidden" name="sbcc" value="">
+<input type="hidden" name="prio" value="0">
+<input type="hidden" name="msgtype" value="0">
+<input type="hidden" name="charset" value="">
+<input type="hidden" name="encoding" value="">
+<input type="hidden" name="save" value="1">
+<input type="hidden" name="body" value="">
+<input type="hidden" name="textbody" value="事務局様
+複雑系知能学科学部3年の中村優真です。
+九月の活動について報告させていただkまs">
+<input type="hidden" name="rcptindicationmode" value="0">
+<input type="hidden" name="disallowforward" value="0">
+<input type="hidden" name="recived_confirm" value="0">
+<input type="hidden" name="isrcptcheck" value="0">
+<input type="hidden" name="reservation_time1" value="">
+<input type="hidden" name="reservation_time2" value="">
+<input type="hidden" name="gourl">
+<input type="hidden" name="dirname" value="1602235864.3026022709">
+<input type="hidden" name="replyto" value="">
+<input type="hidden" name="h_fromid" value="b1018139">
+<input type="hidden" name="h_fromdomain" value="fun.ac.jp">
+
+<input type="hidden" name="fromid" value="b1018139">
+<input type="hidden" name="fromdomain" value="fun.ac.jp">
+
+<input type="hidden" name="goaftersave_mbox" id="goaftersave_mbox" value="">
+<input type="hidden" name="fromhtml" id="fromhtml" value="">
+<!--select id="rcptgrp" name="rcptgrp" style="display: none"></select-->
+<input type="hidden" name="opk" value="">
+	<div id="topMenu">
+		<div class="topBtns">
+			<span id="sendBtn" class="roundTypeBtn" asvwidth="1">
+				<span class="roundTypeBtnInner" onclick="SendMail();">
+					<span id="sendImgBtn">メール送信</span>
+				</span>
+			</span>
+			<span class="roundTypeBtn" asvwidth="1">
+				<span class="roundTypeBtnInner" onclick="Preview();">プレビュー</span>
+			</span>
+			<span class="roundTypeBtn" asvwidth="1">
+				<span class="roundTypeBtnInner" onclick="SaveDraft();">下書き</span>
+			</span>
+			<span id="sendBtn" class="roundTypeBtn" asvwidth="1">
+				<span class="roundTypeBtnInner" onclick="CancelCompose(0);">
+					<span id="discardBtn">破棄</span>
+				</span>
+			</span>
+			<span id="asvErrMsg"></span>
+		</div>
+		<div class="topPullDownBtns">
+			<span class="roundTypeBtn btnPullDownArea" onclick="ShowLayer(&#39;easyaddressDiv&#39;);"> 
+				<span class="roundTypeBtnInner btnPullDownArea">
+					<span class="btnPullDown" id="easyaddressDivBtn" style="background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);">送信履歴</span>
+				</span>
+			</span>
+			<span class="roundTypeBtn btnPullDownArea" onclick="ShowLayer(&#39;mailopt&#39;);"> 
+				<span class="roundTypeBtnInner btnPullDownArea">
+					<span class="btnPullDown" id="mailoptBtn" style="background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);">詳細設定</span>
+				</span>
+			</span>
+		</div>
+	</div>
+	<div id="headerWrap">
+		<table>
+			<tbody><tr>
+				<td class="itemHeader">送信者</td>
+				<td class="tglIcon">
+					<img id="img-trReplyto" src="./rcpt_plus.png" class="pointer" onclick="Toggle(&#39;#trReplyto&#39;,false,&#39;img-trReplyto&#39;);">
+				</td>
+				<td>
+					<table border="0" cellspacing="0" cellpadding="0">
+						<tbody><tr>
+							<td>
+								<div class="fromnameWrap">
+									<input type="text" name="fromname" class="fromname outline" value="Nakamura Yuuma" maxlength="32" tabindex="1" autocomplete="off">
+								</div>
+							</td>
+							<td class="pl06">
+								<div id="fromWrap" style="width: 126px; border-radius: 4px 0px 0px 4px;">b1018139@fun.ac.jp</div>
+								<div id="fromPullDown" style="background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);"></div>
+								<ul id="fromList" select="b1018139@fun.ac.jp" style="display: none;">
+
+									<li class="fromItem" email="b1018139@fun.ac.jp" fromname="Nakamura Yuuma" replyto="" bcc="" fromtype="1" default="1">b1018139@fun.ac.jp</li>
+
+								</ul>
+							</td>
+						</tr>
+					</tbody></table>
+				</td>
+			</tr>
+			<tr id="trReplyto">
+				<td class="itemHeader">Reply-To</td>
+				<td>&nbsp;</td>
+				<td class="pr24">
+					<div class="rcptWrap borderColorD">
+						<span id="replyto_tlist" class="rcptItemList"></span>
+						<input type="text" id="replyto_t" name="replyto_t" size="10" class="rcptInputText ac_input" tabindex="2" autocomplete="off">
+						<input type="hidden" id="_replyto_t" value="">
+					</div>
+					<div id="replyto_tPullDown" class="rcptPullDown" style="right: 24px; background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);"></div>
+				</td>
+			</tr>
+			<tr>
+				<td class="itemHeader">
+					宛先
+					<img src="./composer_address.png" class="callrcpt pointer">
+				</td>
+				<td class="tglIcon">
+					<img id="img-trBcc" class="pointer" src="./rcpt_plus.png" onclick="Toggle(&#39;.trBcc&#39;,false,&#39;img-trBcc&#39;);">
+				</td>
+				<td class="pr24">
+					
+					<div class="rcptWrap borderColorA" style="border-color: rgb(170, 170, 170);">
+						<span id="tolist" class="rcptItemList"><span class="rcptItem rcptOK" name="" email="exam@fun.ac.jp" type="">exam@fun.ac.jp <a href="https://webmail.fun.ac.jp/cgi-bin/composer.cgi?winmode=1&amp;mode=&amp;mbox=&amp;key=&amp;reservepath=&amp;to=&amp;fromhtml=&amp;newmode=&amp;actiontype=&amp;forward_mode=#"><img src="./rcpt_edit.png" class="rcptModify"></a> <a href="https://webmail.fun.ac.jp/cgi-bin/composer.cgi?winmode=1&amp;mode=&amp;mbox=&amp;key=&amp;reservepath=&amp;to=&amp;fromhtml=&amp;newmode=&amp;actiontype=&amp;forward_mode=#"><img src="./rcpt_del.gif" class="rcptDel"></a></span></span>
+						<input type="text" id="to" name="to" size="10" class="rcptInputText ac_input" value="" tabindex="3" autocomplete="off">
+						<input type="hidden" id="_to" value="">
+					</div>
+					<div id="toPullDown" class="rcptPullDown" style="right: 24px; height: 22px; border-color: rgb(170, 170, 170); background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);"></div>
+				</td>
+			</tr>
+			<tr class="trBcc">
+				<td class="itemHeader">Cc</td>
+				<td>&nbsp;</td>
+				<td class="pr24">
+					
+					<div class="rcptWrap borderColorD">
+						<span id="cclist" class="rcptItemList"></span>
+						<input type="text" id="cc" name="cc" size="10" class="rcptInputText ac_input" value="" tabindex="4" autocomplete="off">
+						<input type="hidden" id="_cc" value="">
+					</div>
+					<div id="ccPullDown" class="rcptPullDown" style="right: 24px; background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);"></div>
+				</td>
+			</tr>
+			<tr class="trBcc">
+				<td class="itemHeader">Bcc</td>
+				<td>&nbsp;</td>
+				<td class="pr24">
+					
+					<div class="rcptWrap borderColorD">
+						<span id="bcclist" class="rcptItemList"></span>
+						<input type="text" id="bcc" name="bcc" size="10" class="rcptInputText ac_input" value="" tabindex="5" autocomplete="off">
+						<input type="hidden" id="_bcc" value="">
+					</div>
+					<div id="bccPullDown" class="rcptPullDown" style="right: 24px; background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);"></div>
+				</td>
+			</tr>
+			<tr>
+				<td class="itemHeader">件　名</td>
+				<td class="tglIconPriority">
+					<img id="chkPriority" src="./icon_impor_low.gif" onclick="SetImportance(this);" title="メール重要度">
+				</td>
+				<td class="pr14">
+					<div class="subjectWrap" style="border-color: rgb(170, 170, 170);">
+						<input type="text" name="subject" class="outline" value="" maxlength="256" tabindex="6" onblur="$(&#39;#textDoc&#39;).setCursorPosition(0);" autocomplete="off">
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="itemHeader vatop">ファイル添付</td>
+				<td class="tglIcon vatop">
+					<img id="imgAttach" class="pointer" src="./rcpt_plus.png" onclick="Toggle(&#39;#uploadHeader&#39;,false,&#39;imgAttach&#39;);Toggle(&#39;#uploadQueue&#39;,false);">
+				</td>
+				<td class="pr18">
+					<div id="attachDiv">
+
+						<span id="attachbtn" class="btnUpload">ファイル追加</span>
+
+						<span class="btnUpload" onclick="AddWebFileAttach();">Webファイル</span>
+						<!--span class="btnUpload" onClick="FileOpen('');">開く</span>
+						<span class="btnUpload" onClick="FileDelete('');">ファイル削除</span-->
+
+						<div id="upbarDiv" class="roundDiv">
+							<span id="prgTitle"></span><span id="prgBar"></span>
+						</div>
+						<div id="attachTotal">
+							<span class="attachInfo">添付サイズ : </span><span id="attachSize"> 0MB/10.00MB</span>
+							<span class="attachInfo"> | </span>
+							<span class="attachInfo">添付個数 : </span><span id="attachCount"> 0個</span>
+						</div>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td class="itemHeader vatop"></td>
+				<td class="tglIcon vatop"></td>
+				<td class="pr14">
+					<div id="uploadHeader" class="left">
+						<span class="uploadQueueFilename">ファイル名</span>
+						<span class="uploadQueueFilesize">サイズ</span>
+						<span class="uploadQueueOpen">開く</span>
+						<span class="uploadQueueDel">削除</span>
+					</div>
+					<ul id="uploadQueue" class="left">
+						<li id="dragMsg">
+							<span style="background: url(&quot;../images/base/gen/icon_attachfile.gif&quot;) left 50% no-repeat;">ここにファイルを置いてください。</span>
+						</li>
+					</ul>
+				</td>
+			</tr>
+		</tbody></table>
+	</div>
+	<!-- EDITOR -->
+	<div id="contentWrap">
+		<table width="100%" cellspacing="0" cellpadding="0">
+			<tbody><tr>
+				<td class="editorWrap">
+					<div class="editor-type">
+						<div id="etype-text" onclick="ChangeEditor(&#39;text&#39;);" style="font-weight: bold; color: rgb(0, 0, 0);">text</div>
+						<div id="etype-html" onclick="ChangeEditor(&#39;html&#39;);" style="color: rgb(102, 102, 102); border-right: 0px;">html</div>
+					</div>
+					<div id="toolBar" style="display: none;"><div style="border-color:#ffffff" class="toolbar-group"><span id="toolbar-fontlist" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;fontlist&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;fontlist&#39;,false);"><img src="./clear.gif" style="width:49px;height:20px;border:0px;" onclick="deepEditor.viewSubMenu(&#39;fontlist&#39;);"></span></div><div style="border-color:#ffffff" class="toolbar-group"><span id="toolbar-fontsize" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;fontsize&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;fontsize&#39;,false);"><img src="./clear.gif" style="width:49px;height:20px;border:0px;" onclick="deepEditor.viewSubMenu(&#39;fontsize&#39;);"></span></div><div class="toolbar-group"><span id="toolbar-bold" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;bold&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;bold&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;bold&#39;,true,&#39;&#39;);"></span><span id="toolbar-italic" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;italic&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;italic&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;italic&#39;,true,&#39;&#39;);"></span><span id="toolbar-underline" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;underline&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;underline&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;underline&#39;,true,&#39;&#39;);"></span></div><div class="toolbar-group"><span id="toolbar-forecolor" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;forecolor&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;forecolor&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.viewSubMenu(&#39;forecolor&#39;);"></span><span id="toolbar-backcolor" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;backcolor&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;backcolor&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.viewSubMenu(&#39;backcolor&#39;);"></span></div><div class="toolbar-group"><span id="toolbar-createlink" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;createlink&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;createlink&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.viewSubMenu(&#39;createlink&#39;);"></span></div><div class="toolbar-group"><span id="toolbar-insertorderedlist" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;insertorderedlist&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;insertorderedlist&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;insertorderedlist&#39;,true,&#39;&#39;);"></span><span id="toolbar-insertunorderedlist" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;insertunorderedlist&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;insertunorderedlist&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;insertunorderedlist&#39;,true,&#39;&#39;);"></span></div><div class="toolbar-group"><span id="toolbar-indent" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;indent&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;indent&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;indent&#39;,true,&#39;&#39;);"></span><span id="toolbar-outdent" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;outdent&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;outdent&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;outdent&#39;,true,&#39;&#39;);"></span></div><div class="toolbar-group"><span id="toolbar-justifyleft" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;justifyleft&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;justifyleft&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;justifyleft&#39;,true,&#39;&#39;);"></span><span id="toolbar-justifycenter" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;justifycenter&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;justifycenter&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;justifycenter&#39;,true,&#39;&#39;);"></span><span id="toolbar-justifyright" class="toolbar-item" onmouseover="javascript:deepEditor.ToggleMenu(&#39;justifyright&#39;,true);" onmouseout="javascript:deepEditor.ToggleMenu(&#39;justifyright&#39;,false);"><img src="./clear.gif" style="width:20px;height:20px;border:0px;" onclick="deepEditor.execCmd(&#39;justifyright&#39;,true,&#39;&#39;);"></span></div><div id="sourceMode" onclick="ChangeEditor(&#39;src&#39;);">タグ確認</div></div>
+					<div id="emptyBar" style="display: block;"></div>
+					<div id="popMenu">
+						<ul id="fontlist" class="editor-font-format"><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;Arial&#39;)" style="font-family:Arial;">Arial</li><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;Tahoma&#39;)" style="font-family:Tahoma;">Tahoma</li><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;Verdana&#39;)" style="font-family:Verdana;">Verdana</li><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;System&#39;)" style="font-family:System;">System</li><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;MS Gothic&#39;)" style="font-family:MS Gothic;">MS Gothic</li><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;MS Mincho&#39;)" style="font-family:MS Mincho;">MS Mincho</li><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;Courier New&#39;)" style="font-family:Courier New;">Courier New</li><li onclick="deepEditor.execCmd(&#39;FontName&#39;,false,&#39;Times New Roman&#39;)" style="font-family:Times New Roman;">Times New Roman</li></ul>
+						<ul id="fontsize" class="editor-font-format"><li onclick="deepEditor.execCmd(&#39;FontSize&#39;,false,&#39;1&#39;)" style="font-size:xx-small;">ABC</li><li onclick="deepEditor.execCmd(&#39;FontSize&#39;,false,&#39;2&#39;)" style="font-size:x-small;">ABC</li><li onclick="deepEditor.execCmd(&#39;FontSize&#39;,false,&#39;3&#39;)" style="font-size:small;">ABC</li><li onclick="deepEditor.execCmd(&#39;FontSize&#39;,false,&#39;4&#39;)" style="font-size:medium;">ABC</li><li onclick="deepEditor.execCmd(&#39;FontSize&#39;,false,&#39;5&#39;)" style="font-size:large;">ABC</li><li onclick="deepEditor.execCmd(&#39;FontSize&#39;,false,&#39;6&#39;)" style="font-size:x-large;">ABC</li><li onclick="deepEditor.execCmd(&#39;FontSize&#39;,false,&#39;7&#39;)" style="font-size:xx-large;">ABC</li></ul>
+						<ul id="createlink"><li>URL <input type="text" id="createlink-url"> <input type="button" value="ok" onclick="deepEditor.execCmd(&#39;createLink&#39;,false,document.getElementById(&#39;createlink-url&#39;).value);"></li></ul>
+						<div id="forecolor" class="editor-color"><div class="color-item-group"><span class="color-item" style="background-color:#000000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#000000&#39;);"></span><span class="color-item" style="background-color:#990000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#990000&#39;);"></span><span class="color-item" style="background-color:#FF0000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FF0000&#39;);"></span><span class="color-item" style="background-color:#FF00FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FF00FF&#39;);"></span><span class="color-item" style="background-color:#FF99CC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FF99CC&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#993300;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#993300&#39;);"></span><span class="color-item" style="background-color:#FF6600;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FF6600&#39;);"></span><span class="color-item" style="background-color:#FF9900;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FF9900&#39;);"></span><span class="color-item" style="background-color:#FF8400;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FF8400&#39;);"></span><span class="color-item" style="background-color:#19CC6B;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#19CC6B&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#333300;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#333300&#39;);"></span><span class="color-item" style="background-color:#999900;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#999900&#39;);"></span><span class="color-item" style="background-color:#99CC00;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#99CC00&#39;);"></span><span class="color-item" style="background-color:#FFFF00;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FFFF00&#39;);"></span><span class="color-item" style="background-color:#FFFF99;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FFFF99&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#022000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#022000&#39;);"></span><span class="color-item" style="background-color:#099000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#099000&#39;);"></span><span class="color-item" style="background-color:#339966;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#339966&#39;);"></span><span class="color-item" style="background-color:#00FF00;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#00FF00&#39;);"></span><span class="color-item" style="background-color:#CCFFCC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#CCFFCC&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#003366;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#003366&#39;);"></span><span class="color-item" style="background-color:#009999;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#009999&#39;);"></span><span class="color-item" style="background-color:#33CCCC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#33CCCC&#39;);"></span><span class="color-item" style="background-color:#00FFFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#00FFFF&#39;);"></span><span class="color-item" style="background-color:#CCFF25;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#CCFF25&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#000099;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#000099&#39;);"></span><span class="color-item" style="background-color:#0000FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#0000FF&#39;);"></span><span class="color-item" style="background-color:#3366FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#3366FF&#39;);"></span><span class="color-item" style="background-color:#00CCFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#00CCFF&#39;);"></span><span class="color-item" style="background-color:#99CCFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#99CCFF&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#333399;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#333399&#39;);"></span><span class="color-item" style="background-color:#666699;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#666699&#39;);"></span><span class="color-item" style="background-color:#990990;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#990990&#39;);"></span><span class="color-item" style="background-color:#993366;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#993366&#39;);"></span><span class="color-item" style="background-color:#CC99FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#CC99FF&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#333333;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#333333&#39;);"></span><span class="color-item" style="background-color:#808080;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#808080&#39;);"></span><span class="color-item" style="background-color:#999999;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#999999&#39;);"></span><span class="color-item" style="background-color:#CCCCCC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#CCCCCC&#39;);"></span><span class="color-item" style="background-color:#FFFFFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;ForeColor&#39;,&#39;&#39;,&#39;#FFFFFF&#39;);"></span></div></div>
+						<div id="backcolor" class="editor-color"><div class="color-item-group"><span class="color-item" style="background-color:#000000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#000000&#39;);"></span><span class="color-item" style="background-color:#990000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#990000&#39;);"></span><span class="color-item" style="background-color:#FF0000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FF0000&#39;);"></span><span class="color-item" style="background-color:#FF00FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FF00FF&#39;);"></span><span class="color-item" style="background-color:#FF99CC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FF99CC&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#993300;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#993300&#39;);"></span><span class="color-item" style="background-color:#FF6600;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FF6600&#39;);"></span><span class="color-item" style="background-color:#FF9900;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FF9900&#39;);"></span><span class="color-item" style="background-color:#FF8400;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FF8400&#39;);"></span><span class="color-item" style="background-color:#19CC6B;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#19CC6B&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#333300;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#333300&#39;);"></span><span class="color-item" style="background-color:#999900;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#999900&#39;);"></span><span class="color-item" style="background-color:#99CC00;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#99CC00&#39;);"></span><span class="color-item" style="background-color:#FFFF00;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FFFF00&#39;);"></span><span class="color-item" style="background-color:#FFFF99;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FFFF99&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#022000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#022000&#39;);"></span><span class="color-item" style="background-color:#099000;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#099000&#39;);"></span><span class="color-item" style="background-color:#339966;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#339966&#39;);"></span><span class="color-item" style="background-color:#00FF00;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#00FF00&#39;);"></span><span class="color-item" style="background-color:#CCFFCC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#CCFFCC&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#003366;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#003366&#39;);"></span><span class="color-item" style="background-color:#009999;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#009999&#39;);"></span><span class="color-item" style="background-color:#33CCCC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#33CCCC&#39;);"></span><span class="color-item" style="background-color:#00FFFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#00FFFF&#39;);"></span><span class="color-item" style="background-color:#CCFF25;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#CCFF25&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#000099;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#000099&#39;);"></span><span class="color-item" style="background-color:#0000FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#0000FF&#39;);"></span><span class="color-item" style="background-color:#3366FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#3366FF&#39;);"></span><span class="color-item" style="background-color:#00CCFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#00CCFF&#39;);"></span><span class="color-item" style="background-color:#99CCFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#99CCFF&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#333399;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#333399&#39;);"></span><span class="color-item" style="background-color:#666699;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#666699&#39;);"></span><span class="color-item" style="background-color:#990990;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#990990&#39;);"></span><span class="color-item" style="background-color:#993366;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#993366&#39;);"></span><span class="color-item" style="background-color:#CC99FF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#CC99FF&#39;);"></span></div><div class="color-item-group"><span class="color-item" style="background-color:#333333;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#333333&#39;);"></span><span class="color-item" style="background-color:#808080;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#808080&#39;);"></span><span class="color-item" style="background-color:#999999;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#999999&#39;);"></span><span class="color-item" style="background-color:#CCCCCC;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#CCCCCC&#39;);"></span><span class="color-item" style="background-color:#FFFFFF;"><img src="./clear.gif" style="width:14px;height:14px;border:0px;" onclick="deepEditor.execCmd(&#39;hilitecolor&#39;,&#39;&#39;,&#39;#FFFFFF&#39;);"></span></div></div>
+					</div>
+					<div class="bottomPullDownBtns">
+						<span class="roundTypeBtn btnPullDownArea" onclick="ShowLayer(&#39;signDiv&#39;,true);"> 
+							<span class="roundTypeBtnInner btnPullDownArea">
+								<span class="btnPullDown" id="signDivBtn" style="background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);">署名</span>
+							</span>
+						</span>
+						<span class="roundTypeBtn btnPullDownArea" onclick="ShowLayer(&#39;cwordDiv&#39;,true);"> 
+							<span class="roundTypeBtnInner btnPullDownArea">
+								<span class="btnPullDown" id="cwordDivBtn" style="background-image: url(&quot;../extension/images/base/pulldownbtn_arrow.gif&quot;);">定型文</span>
+							</span>
+						</span>
+					</div>
+					<div id="htmlDiv" style="display: none; height: 494px;">
+						<iframe id="htmlDoc" name="htmlDoc" frameborder="0" vspace="0" hspace="0" src="./htmlparse.html" tabindex="7"></iframe>
+						<div id="tmpHtmlDoc"></div>
+					</div>
+					<div id="textDiv" style="display: block; height: 494px;">
+						<textarea id="textDoc" class="textContent" tabindex="7"></textarea>
+					</div>
+					<div id="srcDiv" style="height: 494px;">
+						<textarea id="srcDoc" class="textContent"></textarea>
+					</div>
+				</td>
+			</tr>
+		</tbody></table>
+	</div>
+	</form> 
+	<!-- mainform end -->
+
+	<!-- easy address -->
+	<ul id="easyaddressDiv" class="toggleDiv" style="display: none;">
+		<li class="easyaddr-btn">
+			<span class="btn" onclick="GetEasyAddress(&#39;to&#39;);">宛先</span><span class="btn" onclick="GetEasyAddress(&#39;cc&#39;);">Cc</span><span class="btn" onclick="GetEasyAddress(&#39;bcc&#39;);">Bcc</span><span class="btn" onclick="GetEasyAddress(&#39;replyto_t&#39;);">Reply-To</span>
+			| <span class="btn" onclick="GetEasyAddress(&#39;easydelete&#39;);">削除</span>
+		</li>
+		<li class="easyaddr-item">
+			<span class="ea-chkbox"><input type="checkbox" id="easyToggle"></span>
+			<span class="ea-date leftdot">時間</span>
+			<span class="ea-name leftdot">名前</span>
+			<span class="ea-email leftdot" style="width: 273px;">メールアドレス</span>
+		</li>
+		<div id="easyAddressWrap" style="height: 404px;">
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="cml-coordinator" value="cml-coordinator@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/10/02 11:17:15</span>
+				<span class="ea-name indent" title="cml-coordinator">cml-coordinator</span>
+				<span class="ea-email indent" title="cml-coordinator@fun.ac.jp" style="width: 273px;">cml-coordinator@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="satoshi" value="satoshi@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/10/01 15:54:01</span>
+				<span class="ea-name indent" title="satoshi">satoshi</span>
+				<span class="ea-email indent" title="satoshi@fun.ac.jp" style="width: 273px;">satoshi@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="satoshi@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/30 16:57:22</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="satoshi@fun.ac.jp" style="width: 273px;">satoshi@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="pdmnd774@xc4.so-net.ne.jp"></span>
+				<span class="ea-date indent">2020/09/28 12:31:40</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="pdmnd774@xc4.so-net.ne.jp" style="width: 273px;">pdmnd774@xc4.so-net.ne.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="y-tanaka@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="y-tanaka@fun.ac.jp" style="width: 273px;">y-tanaka@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="aterai@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="aterai@fun.ac.jp" style="width: 273px;">aterai@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="mima@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="mima@fun.ac.jp" style="width: 273px;">mima@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018257@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018257@fun.ac.jp" style="width: 273px;">b1018257@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018206@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018206@fun.ac.jp" style="width: 273px;">b1018206@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018181@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018181@fun.ac.jp" style="width: 273px;">b1018181@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018128@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018128@fun.ac.jp" style="width: 273px;">b1018128@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018058@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018058@fun.ac.jp" style="width: 273px;">b1018058@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018052@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018052@fun.ac.jp" style="width: 273px;">b1018052@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018045@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018045@fun.ac.jp" style="width: 273px;">b1018045@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018044@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018044@fun.ac.jp" style="width: 273px;">b1018044@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1016114@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1016114@fun.ac.jp" style="width: 273px;">b1016114@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="pwg-report@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="pwg-report@fun.ac.jp" style="width: 273px;">pwg-report@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="岩崎　照大" value="b1018023@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/23 16:50:20</span>
+				<span class="ea-name indent" title="岩崎　照大">岩崎　照大</span>
+				<span class="ea-email indent" title="b1018023@fun.ac.jp" style="width: 273px;">b1018023@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="公立はこだて未来大学　教務課" value="exam@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/15 15:20:15</span>
+				<span class="ea-name indent" title="公立はこだて未来大学　教務課">公立はこだて未来大学　教務課</span>
+				<span class="ea-email indent" title="exam@fun.ac.jp" style="width: 273px;">exam@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="exam@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/09/14 16:13:45</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="exam@fun.ac.jp" style="width: 273px;">exam@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Yuki Amemiya" value="amemiya.yuki.bz3@is.naist.jp"></span>
+				<span class="ea-date indent">2020/08/27 15:02:49</span>
+				<span class="ea-name indent" title="Yuki Amemiya">Yuki Amemiya</span>
+				<span class="ea-email indent" title="amemiya.yuki.bz3@is.naist.jp" style="width: 273px;">amemiya.yuki.bz3@is.naist.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Shigeru Sakurazawa" value="sakura@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/08/05 15:18:50</span>
+				<span class="ea-name indent" title="Shigeru Sakurazawa">Shigeru Sakurazawa</span>
+				<span class="ea-email indent" title="sakura@fun.ac.jp" style="width: 273px;">sakura@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="sakura@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/08/02 17:01:54</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="sakura@fun.ac.jp" style="width: 273px;">sakura@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="pwg-ml@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/22 17:44:11</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="pwg-ml@fun.ac.jp" style="width: 273px;">pwg-ml@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018023@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/21 21:06:14</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018023@fun.ac.jp" style="width: 273px;">b1018023@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Hiroaki Sasaki" value="hsasaki@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/17 10:36:23</span>
+				<span class="ea-name indent" title="Hiroaki Sasaki">Hiroaki Sasaki</span>
+				<span class="ea-email indent" title="hsasaki@fun.ac.jp" style="width: 273px;">hsasaki@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="kameda@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/16 18:19:32</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="kameda@fun.ac.jp" style="width: 273px;">kameda@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Koutarou Sugawara" value="b1019117@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/16 18:04:05</span>
+				<span class="ea-name indent" title="Koutarou Sugawara">Koutarou Sugawara</span>
+				<span class="ea-email indent" title="b1019117@fun.ac.jp" style="width: 273px;">b1019117@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="tutors-ml@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/12 17:12:10</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="tutors-ml@fun.ac.jp" style="width: 273px;">tutors-ml@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019117@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/12 17:12:10</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019117@fun.ac.jp" style="width: 273px;">b1019117@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Yuichi Katori" value="katori@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/09 16:03:11</span>
+				<span class="ea-name indent" title="Yuichi Katori">Yuichi Katori</span>
+				<span class="ea-email indent" title="katori@fun.ac.jp" style="width: 273px;">katori@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019237@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/07/07 11:16:35</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019237@fun.ac.jp" style="width: 273px;">b1019237@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Tanaka Yoshitaro" value="y-tanaka@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/30 21:40:12</span>
+				<span class="ea-name indent" title="Tanaka Yoshitaro">Tanaka Yoshitaro</span>
+				<span class="ea-email indent" title="y-tanaka@fun.ac.jp" style="width: 273px;">y-tanaka@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="res@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/30 21:40:12</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="res@fun.ac.jp" style="width: 273px;">res@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="edu@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/26 13:31:00</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="edu@fun.ac.jp" style="width: 273px;">edu@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="m-naka" value="m-naka@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/23 18:46:56</span>
+				<span class="ea-name indent" title="m-naka">m-naka</span>
+				<span class="ea-email indent" title="m-naka@fun.ac.jp" style="width: 273px;">m-naka@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020147@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/22 18:00:29</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020147@fun.ac.jp" style="width: 273px;">b1020147@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020098@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/22 16:08:29</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020098@fun.ac.jp" style="width: 273px;">b1020098@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="tominaga" value="tominaga@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/17 19:47:23</span>
+				<span class="ea-name indent" title="tominaga">tominaga</span>
+				<span class="ea-email indent" title="tominaga@fun.ac.jp" style="width: 273px;">tominaga@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020151@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/15 17:50:40</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020151@fun.ac.jp" style="width: 273px;">b1020151@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="hsasaki@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/11 00:07:10</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="hsasaki@fun.ac.jp" style="width: 273px;">hsasaki@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020228@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 14:44:25</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020228@fun.ac.jp" style="width: 273px;">b1020228@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020219@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 14:44:25</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020219@fun.ac.jp" style="width: 273px;">b1020219@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020221@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 14:44:25</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020221@fun.ac.jp" style="width: 273px;">b1020221@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019213@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 14:44:25</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019213@fun.ac.jp" style="width: 273px;">b1019213@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="matsu@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 14:44:25</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="matsu@fun.ac.jp" style="width: 273px;">matsu@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="tominaga@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 14:44:25</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="tominaga@fun.ac.jp" style="width: 273px;">tominaga@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Nakamura Yuuma" value="b1018139@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 14:44:25</span>
+				<span class="ea-name indent" title="Nakamura Yuuma">Nakamura Yuuma</span>
+				<span class="ea-email indent" title="b1018139@fun.ac.jp" style="width: 273px;">b1018139@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="cml-coordinator@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/06/04 13:41:37</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="cml-coordinator@fun.ac.jp" style="width: 273px;">cml-coordinator@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020227@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/28 19:25:36</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020227@fun.ac.jp" style="width: 273px;">b1020227@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020226@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/28 19:25:36</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020226@fun.ac.jp" style="width: 273px;">b1020226@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020220@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/28 19:25:36</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020220@fun.ac.jp" style="width: 273px;">b1020220@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020218@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/28 19:25:36</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020218@fun.ac.jp" style="width: 273px;">b1020218@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020214@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/28 19:25:36</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020214@fun.ac.jp" style="width: 273px;">b1020214@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020224@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/27 19:16:21</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020224@fun.ac.jp" style="width: 273px;">b1020224@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020150@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/25 16:52:51</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020150@fun.ac.jp" style="width: 273px;">b1020150@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Keiji Suzuki" value="kjsuzuki@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/22 16:43:22</span>
+				<span class="ea-name indent" title="Keiji Suzuki">Keiji Suzuki</span>
+				<span class="ea-email indent" title="kjsuzuki@fun.ac.jp" style="width: 273px;">kjsuzuki@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020232@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/20 13:34:43</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020232@fun.ac.jp" style="width: 273px;">b1020232@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020223@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/20 13:26:31</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020223@fun.ac.jp" style="width: 273px;">b1020223@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020222@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/20 13:25:43</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020222@fun.ac.jp" style="width: 273px;">b1020222@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020213@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/20 13:20:00</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020213@fun.ac.jp" style="width: 273px;">b1020213@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020212@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/20 13:18:59</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020212@fun.ac.jp" style="width: 273px;">b1020212@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019217@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/20 13:17:46</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019217@fun.ac.jp" style="width: 273px;">b1019217@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="career@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/14 19:19:45</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="career@fun.ac.jp" style="width: 273px;">career@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Katsuya MATSUBARA" value="matsu@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/09 19:21:43</span>
+				<span class="ea-name indent" title="Katsuya MATSUBARA">Katsuya MATSUBARA</span>
+				<span class="ea-email indent" title="matsu@fun.ac.jp" style="width: 273px;">matsu@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020231@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/06 11:42:08</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020231@fun.ac.jp" style="width: 273px;">b1020231@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020229@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/06 11:36:50</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020229@fun.ac.jp" style="width: 273px;">b1020229@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020225@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/06 11:31:00</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020225@fun.ac.jp" style="width: 273px;">b1020225@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020217@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/06 11:19:45</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020217@fun.ac.jp" style="width: 273px;">b1020217@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1020215@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/06 11:17:49</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1020215@fun.ac.jp" style="width: 273px;">b1020215@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018139@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/05/06 11:11:54</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018139@fun.ac.jp" style="width: 273px;">b1018139@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="katori@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/04/22 15:35:52</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="katori@fun.ac.jp" style="width: 273px;">katori@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="y-nakamr@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/04/21 09:53:46</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="y-nakamr@fun.ac.jp" style="width: 273px;">y-nakamr@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="yura@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/04/21 09:51:38</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="yura@fun.ac.jp" style="width: 273px;">yura@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1017152@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/03/14 15:48:19</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1017152@fun.ac.jp" style="width: 273px;">b1017152@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="kameda" value="kameda@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/03/03 15:02:20</span>
+				<span class="ea-name indent" title="kameda">kameda</span>
+				<span class="ea-email indent" title="kameda@fun.ac.jp" style="width: 273px;">kameda@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="公立はこだて未来大学 事務局教務課" value="stu@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/02/19 12:13:17</span>
+				<span class="ea-name indent" title="公立はこだて未来大学 事務局教務課">公立はこだて未来大学 事務局教務課</span>
+				<span class="ea-email indent" title="stu@fun.ac.jp" style="width: 273px;">stu@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="kjsuzuki@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/02/02 13:04:32</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="kjsuzuki@fun.ac.jp" style="width: 273px;">kjsuzuki@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="satonao@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/01/24 10:45:47</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="satonao@fun.ac.jp" style="width: 273px;">satonao@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019214@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/01/19 22:23:04</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019214@fun.ac.jp" style="width: 273px;">b1019214@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Daichi koyama" value="b1018240@fun.ac.jp"></span>
+				<span class="ea-date indent">2020/01/18 17:55:34</span>
+				<span class="ea-name indent" title="Daichi koyama">Daichi koyama</span>
+				<span class="ea-email indent" title="b1018240@fun.ac.jp" style="width: 273px;">b1018240@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="mll-admin@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/11/07 09:34:26</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="mll-admin@fun.ac.jp" style="width: 273px;">mll-admin@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019225@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/30 20:52:36</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019225@fun.ac.jp" style="width: 273px;">b1019225@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018015@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/22 13:48:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018015@fun.ac.jp" style="width: 273px;">b1018015@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1017009@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/22 13:48:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1017009@fun.ac.jp" style="width: 273px;">b1017009@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1017015@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/22 13:48:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1017015@fun.ac.jp" style="width: 273px;">b1017015@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="g2119006@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/22 13:48:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="g2119006@fun.ac.jp" style="width: 273px;">g2119006@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018106@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/22 13:48:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018106@fun.ac.jp" style="width: 273px;">b1018106@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1017119@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/22 13:48:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1017119@fun.ac.jp" style="width: 273px;">b1017119@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1016127@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/22 13:48:20</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1016127@fun.ac.jp" style="width: 273px;">b1016127@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018034@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/10/16 14:04:40</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018034@fun.ac.jp" style="width: 273px;">b1018034@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019097@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/07/25 20:12:58</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019097@fun.ac.jp" style="width: 273px;">b1019097@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1019201@fun.ac.jp"></span>
+				<span class="ea-date indent">2019/05/21 20:47:57</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1019201@fun.ac.jp" style="width: 273px;">b1019201@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="Kimura Kenichi" value="kimurakenichi@me.com"></span>
+				<span class="ea-date indent">2018/07/13 10:55:01</span>
+				<span class="ea-name indent" title="Kimura Kenichi">Kimura Kenichi</span>
+				<span class="ea-email indent" title="kimurakenichi@me.com" style="width: 273px;">kimurakenichi@me.com</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018135@fun.ac.jp"></span>
+				<span class="ea-date indent">2018/06/26 13:22:12</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018135@fun.ac.jp" style="width: 273px;">b1018135@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018135@.fun.ac.jp"></span>
+				<span class="ea-date indent">2018/06/26 13:19:45</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018135@.fun.ac.jp" style="width: 273px;">b1018135@.fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="s-takagi@fun.ac.jp"></span>
+				<span class="ea-date indent">2018/06/23 17:53:34</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="s-takagi@fun.ac.jp" style="width: 273px;">s-takagi@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018219@fun.ac.jp"></span>
+				<span class="ea-date indent">2018/06/06 04:13:48</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018219@fun.ac.jp" style="width: 273px;">b1018219@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="" value="b1018140@fun.ac.jp"></span>
+				<span class="ea-date indent">2018/04/10 14:50:59</span>
+				<span class="ea-name indent" title=""></span>
+				<span class="ea-email indent" title="b1018140@fun.ac.jp" style="width: 273px;">b1018140@fun.ac.jp</span>
+			</li>
+			
+			<li class="easyaddr-itemlist">
+				<span class="ea-chkbox"><input name="easyaddress" type="checkbox" mname="b1018139" value="b1018139@fun.ac.jp"></span>
+				<span class="ea-date indent">2018/04/10 14:50:01</span>
+				<span class="ea-name indent" title="b1018139">b1018139</span>
+				<span class="ea-email indent" title="b1018139@fun.ac.jp" style="width: 273px;">b1018139@fun.ac.jp</span>
+			</li>
+			
+		</div>
+	</ul>
+
+	<!-- mail option -->
+	<div id="mailopt" class="toggleDiv" style="display: none;">
+		<li>
+			<span class="mailoptItem">予約送信</span>
+			<span class="inputAlign">
+				<input type="checkbox" id="reservation" value="1">
+			</span>
+			<span class="mailoptText">予約</span>
+			<span>
+				<select id="reservation_year" onchange="ChkDate();"><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option></select>
+			</span>
+			<span class="mailoptText">年</span>
+			<span>
+				<select id="reservation_month" onchange="ChkDate();">
+					
+					<option value="1">1</option>
+					
+					<option value="2">2</option>
+					
+					<option value="3">3</option>
+					
+					<option value="4">4</option>
+					
+					<option value="5">5</option>
+					
+					<option value="6">6</option>
+					
+					<option value="7">7</option>
+					
+					<option value="8">8</option>
+					
+					<option value="9">9</option>
+					
+					<option value="10" selected="">10</option>
+					
+					<option value="11">11</option>
+					
+					<option value="12">12</option>
+					
+				</select>
+			</span>
+			<span class="mailoptText">月</span>
+			<span>
+				<select id="reservation_day">
+					
+					<option value="1">1</option>
+					
+					<option value="2">2</option>
+					
+					<option value="3">3</option>
+					
+					<option value="4">4</option>
+					
+					<option value="5" selected="">5</option>
+					
+					<option value="6">6</option>
+					
+					<option value="7">7</option>
+					
+					<option value="8">8</option>
+					
+					<option value="9">9</option>
+					
+					<option value="10">10</option>
+					
+					<option value="11">11</option>
+					
+					<option value="12">12</option>
+					
+					<option value="13">13</option>
+					
+					<option value="14">14</option>
+					
+					<option value="15">15</option>
+					
+					<option value="16">16</option>
+					
+					<option value="17">17</option>
+					
+					<option value="18">18</option>
+					
+					<option value="19">19</option>
+					
+					<option value="20">20</option>
+					
+					<option value="21">21</option>
+					
+					<option value="22">22</option>
+					
+					<option value="23">23</option>
+					
+					<option value="24">24</option>
+					
+					<option value="25">25</option>
+					
+					<option value="26">26</option>
+					
+					<option value="27">27</option>
+					
+					<option value="28">28</option>
+					
+					<option value="29">29</option>
+					
+					<option value="30">30</option>
+					
+					<option value="31">31</option>
+					
+				</select>
+			</span>
+			<span class="mailoptText">日</span>
+			<span>
+				<select id="reservation_hour">
+					
+					<option value="0">0</option>
+					
+					<option value="1">1</option>
+					
+					<option value="2">2</option>
+					
+					<option value="3">3</option>
+					
+					<option value="4">4</option>
+					
+					<option value="5">5</option>
+					
+					<option value="6">6</option>
+					
+					<option value="7">7</option>
+					
+					<option value="8">8</option>
+					
+					<option value="9">9</option>
+					
+					<option value="10">10</option>
+					
+					<option value="11">11</option>
+					
+					<option value="12">12</option>
+					
+					<option value="13">13</option>
+					
+					<option value="14" selected="">14</option>
+					
+					<option value="15">15</option>
+					
+					<option value="16">16</option>
+					
+					<option value="17">17</option>
+					
+					<option value="18">18</option>
+					
+					<option value="19">19</option>
+					
+					<option value="20">20</option>
+					
+					<option value="21">21</option>
+					
+					<option value="22">22</option>
+					
+					<option value="23">23</option>
+					
+				</select>
+			</span>
+			<span class="mailoptText">時</span>
+			<span>
+				<select id="reservation_minute">
+					
+					<option value="0">0</option>
+					
+					<option value="1">1</option>
+					
+					<option value="2">2</option>
+					
+					<option value="3">3</option>
+					
+					<option value="4">4</option>
+					
+					<option value="5">5</option>
+					
+					<option value="6">6</option>
+					
+					<option value="7">7</option>
+					
+					<option value="8">8</option>
+					
+					<option value="9">9</option>
+					
+					<option value="10">10</option>
+					
+					<option value="11">11</option>
+					
+					<option value="12">12</option>
+					
+					<option value="13">13</option>
+					
+					<option value="14">14</option>
+					
+					<option value="15">15</option>
+					
+					<option value="16">16</option>
+					
+					<option value="17">17</option>
+					
+					<option value="18">18</option>
+					
+					<option value="19">19</option>
+					
+					<option value="20">20</option>
+					
+					<option value="21">21</option>
+					
+					<option value="22">22</option>
+					
+					<option value="23">23</option>
+					
+					<option value="24">24</option>
+					
+					<option value="25">25</option>
+					
+					<option value="26">26</option>
+					
+					<option value="27">27</option>
+					
+					<option value="28">28</option>
+					
+					<option value="29">29</option>
+					
+					<option value="30">30</option>
+					
+					<option value="31" selected="">31</option>
+					
+					<option value="32">32</option>
+					
+					<option value="33">33</option>
+					
+					<option value="34">34</option>
+					
+					<option value="35">35</option>
+					
+					<option value="36">36</option>
+					
+					<option value="37">37</option>
+					
+					<option value="38">38</option>
+					
+					<option value="39">39</option>
+					
+					<option value="40">40</option>
+					
+					<option value="41">41</option>
+					
+					<option value="42">42</option>
+					
+					<option value="43">43</option>
+					
+					<option value="44">44</option>
+					
+					<option value="45">45</option>
+					
+					<option value="46">46</option>
+					
+					<option value="47">47</option>
+					
+					<option value="48">48</option>
+					
+					<option value="49">49</option>
+					
+					<option value="50">50</option>
+					
+					<option value="51">51</option>
+					
+					<option value="52">52</option>
+					
+					<option value="53">53</option>
+					
+					<option value="54">54</option>
+					
+					<option value="55">55</option>
+					
+					<option value="56">56</option>
+					
+					<option value="57">57</option>
+					
+					<option value="58">58</option>
+					
+					<option value="59">59</option>
+					
+				</select>
+			</span>
+			<span class="mailoptText">分</span>
+		</li>
+		<li>
+			<span class="mailoptItem">メール重要度</span>
+			<span class="inputAlign"><input type="radio" name="priority" value="2" onclick="$(&#39;#chkPriority&#39;).attr(&#39;src&#39;, &#39;../images/base/gen/icon_impor_low.gif&#39;);"></span><span>低い</span>
+			<span class="inputAlign"><input type="radio" name="priority" value="0" checked="" onclick="$(&#39;#chkPriority&#39;).attr(&#39;src&#39;, &#39;../images/base/gen/icon_impor_low.gif&#39;);"></span><span>普通</span>
+			<span class="inputAlign"><input type="radio" name="priority" value="1" onclick="$(&#39;#chkPriority&#39;).attr(&#39;src&#39;, &#39;../images/base/gen/icon_impor.gif&#39;);"></span><span>高い</span>
+		</li>
+		<li>
+			<span class="mailoptItem">文字セット</span>
+			<span>
+				<select id="charsetlist" size="1">
+					<option value="" selected="">自動判定</option>
+					<option value="SHIFT-JIS">日本語(SHIFT-JIS)</option>
+					<option value="ISO-2022-JP">日本語(ISO-2022-JP)</option>
+					<option value="US-ASCII">英語(US-ASCII)</option>
+					<option value="EUC-KR">韓国語(EUC-KR)</option>
+					<option value="ISO-2022-KR">韓国語(ISO-2022-KR)</option>
+					<option value="GB2312">中国語(GB2312)</option>
+					<option value="BIG5">中国語(BIG5)</option>
+					<option value="UTF-8">UNICODE(UTF-8)</option>
+				</select>
+			</span>
+		</li>
+		<li>
+			<span class="inputAlign"><input type="checkbox" id="o-save" value="1" checked=""></span><span>送信メールのコピーを保存</span>
+			<span class="inputAlign"><input type="checkbox" id="o-rcptindicationmode" value="1"></span><span>宛先の個別表示</span>
+			<span class="inputAlign"><input type="checkbox" id="o-disallowforward" value="1"></span><span>自動転送の禁止設定</span>
+			<span class="inputAlign"><input type="checkbox" id="o-recived_confirm" value="1"></span><span>開封確認を求める</span>
+		</li>
+	</div>
+
+	<!-- macro list -->
+	<div id="cwordDiv" class="roundDiv" style="display: none;">
+		<dl>
+			<dt>
+				<select id="cwordkey" onchange="SetMacro(1);">
+					
+						<option value="627314172" selected="">b1018139</option>
+					
+				</select>
+				<div class="right"><span class="btn" onclick="AddMacro(1);">文頭に挿入</span><span class="btn" onclick="AddMacro(2);">文末に挿入</span></div>
+			</dt>
+			<dd>
+				
+				<div id="cword-627314172" class="cwordItem" style="display: block;">
+					<pre>-----へ
+公立はこだて未来大学学部二年複雑系コースの中村優真です。
+今回は----の件で連絡させていただきました。</pre>
+				</div>
+				
+			</dd>
+		</dl>
+	</div>
+	<!-- signature list -->
+	<div id="signDiv" class="roundDiv" style="top: 204px; display: none;">
+		<dl>
+			<dt>
+				<select id="signkey" onchange="SetSign();">
+					
+						<option value="238947599" selected="">基本形</option>
+					
+				</select>
+				<div class="right"><span class="btn" onclick="AddSign(false);">文末に挿入</span></div>
+			</dt>
+			<dd>
+
+				<div id="sign-238947599" class="signItem" t="text" style="display: block;">
+					
+						<pre>----------------------------------------
+公立はこだて未来大学 システム情報科学部
+複雑系知能学科 複雑系コース
+2年 中村 優真
+e-mail: b1018139@fun.ac.jp
+----------------------------------------</pre>
+					
+				</div>
+				
+			</dd>
+		</dl>
+	</div>
+	<form id="upfileform" method="post" action="https://webmail.fun.ac.jp/cgi-bin/uploadprocess_ex.cgi">
+		<input type="hidden" name="mode" value="">
+		<input type="hidden" name="dirname" value="1602235864.3026022709">
+		<input type="hidden" name="openfile" value="">
+		<input type="hidden" name="filelist" value="">
+	</form>
+</div>
+
+<!-- easy address pull down -->
+<ul id="easyPullDown" current="" style="width: 313px; display: none;">
+
+	<li ename="cml-coordinator" email="cml-coordinator@fun.ac.jp">cml-coordinator &lt;cml-coordinator@fun.ac.jp&gt;</li>
+
+	<li ename="satoshi" email="satoshi@fun.ac.jp">satoshi &lt;satoshi@fun.ac.jp&gt;</li>
+
+	<li ename="" email="satoshi@fun.ac.jp">satoshi@fun.ac.jp</li>
+
+	<li ename="" email="pdmnd774@xc4.so-net.ne.jp">pdmnd774@xc4.so-net.ne.jp</li>
+
+	<li ename="" email="y-tanaka@fun.ac.jp">y-tanaka@fun.ac.jp</li>
+
+	<li ename="" email="aterai@fun.ac.jp">aterai@fun.ac.jp</li>
+
+	<li ename="" email="mima@fun.ac.jp">mima@fun.ac.jp</li>
+
+	<li ename="" email="b1018257@fun.ac.jp">b1018257@fun.ac.jp</li>
+
+	<li ename="" email="b1018206@fun.ac.jp">b1018206@fun.ac.jp</li>
+
+	<li ename="" email="b1018181@fun.ac.jp">b1018181@fun.ac.jp</li>
+
+	<li ename="" email="b1018128@fun.ac.jp">b1018128@fun.ac.jp</li>
+
+	<li ename="" email="b1018058@fun.ac.jp">b1018058@fun.ac.jp</li>
+
+	<li ename="" email="b1018052@fun.ac.jp">b1018052@fun.ac.jp</li>
+
+	<li ename="" email="b1018045@fun.ac.jp">b1018045@fun.ac.jp</li>
+
+	<li ename="" email="b1018044@fun.ac.jp">b1018044@fun.ac.jp</li>
+
+	<li ename="" email="b1016114@fun.ac.jp">b1016114@fun.ac.jp</li>
+
+	<li ename="" email="pwg-report@fun.ac.jp">pwg-report@fun.ac.jp</li>
+
+	<li ename="岩崎　照大" email="b1018023@fun.ac.jp">岩崎　照大 &lt;b1018023@fun.ac.jp&gt;</li>
+
+	<li ename="公立はこだて未来大学　教務課" email="exam@fun.ac.jp">公立はこだて未来大学　教務課 &lt;exam@fun.ac.jp&gt;</li>
+
+	<li ename="" email="exam@fun.ac.jp">exam@fun.ac.jp</li>
+
+	<li ename="Yuki Amemiya" email="amemiya.yuki.bz3@is.naist.jp">Yuki Amemiya &lt;amemiya.yuki.bz3@is.naist.jp&gt;</li>
+
+	<li ename="Shigeru Sakurazawa" email="sakura@fun.ac.jp">Shigeru Sakurazawa &lt;sakura@fun.ac.jp&gt;</li>
+
+	<li ename="" email="sakura@fun.ac.jp">sakura@fun.ac.jp</li>
+
+	<li ename="" email="pwg-ml@fun.ac.jp">pwg-ml@fun.ac.jp</li>
+
+	<li ename="" email="b1018023@fun.ac.jp">b1018023@fun.ac.jp</li>
+
+	<li ename="Hiroaki Sasaki" email="hsasaki@fun.ac.jp">Hiroaki Sasaki &lt;hsasaki@fun.ac.jp&gt;</li>
+
+	<li ename="" email="kameda@fun.ac.jp">kameda@fun.ac.jp</li>
+
+	<li ename="Koutarou Sugawara" email="b1019117@fun.ac.jp">Koutarou Sugawara &lt;b1019117@fun.ac.jp&gt;</li>
+
+	<li ename="" email="tutors-ml@fun.ac.jp">tutors-ml@fun.ac.jp</li>
+
+	<li ename="" email="b1019117@fun.ac.jp">b1019117@fun.ac.jp</li>
+
+	<li ename="Yuichi Katori" email="katori@fun.ac.jp">Yuichi Katori &lt;katori@fun.ac.jp&gt;</li>
+
+	<li ename="" email="b1019237@fun.ac.jp">b1019237@fun.ac.jp</li>
+
+	<li ename="Tanaka Yoshitaro" email="y-tanaka@fun.ac.jp">Tanaka Yoshitaro &lt;y-tanaka@fun.ac.jp&gt;</li>
+
+	<li ename="" email="res@fun.ac.jp">res@fun.ac.jp</li>
+
+	<li ename="" email="edu@fun.ac.jp">edu@fun.ac.jp</li>
+
+	<li ename="m-naka" email="m-naka@fun.ac.jp">m-naka &lt;m-naka@fun.ac.jp&gt;</li>
+
+	<li ename="" email="b1020147@fun.ac.jp">b1020147@fun.ac.jp</li>
+
+	<li ename="" email="b1020098@fun.ac.jp">b1020098@fun.ac.jp</li>
+
+	<li ename="tominaga" email="tominaga@fun.ac.jp">tominaga &lt;tominaga@fun.ac.jp&gt;</li>
+
+	<li ename="" email="b1020151@fun.ac.jp">b1020151@fun.ac.jp</li>
+
+	<li ename="" email="hsasaki@fun.ac.jp">hsasaki@fun.ac.jp</li>
+
+	<li ename="" email="b1020228@fun.ac.jp">b1020228@fun.ac.jp</li>
+
+	<li ename="" email="b1020219@fun.ac.jp">b1020219@fun.ac.jp</li>
+
+	<li ename="" email="b1020221@fun.ac.jp">b1020221@fun.ac.jp</li>
+
+	<li ename="" email="b1019213@fun.ac.jp">b1019213@fun.ac.jp</li>
+
+	<li ename="" email="matsu@fun.ac.jp">matsu@fun.ac.jp</li>
+
+	<li ename="" email="tominaga@fun.ac.jp">tominaga@fun.ac.jp</li>
+
+	<li ename="Nakamura Yuuma" email="b1018139@fun.ac.jp">Nakamura Yuuma &lt;b1018139@fun.ac.jp&gt;</li>
+
+	<li ename="" email="cml-coordinator@fun.ac.jp">cml-coordinator@fun.ac.jp</li>
+
+	<li ename="" email="b1020227@fun.ac.jp">b1020227@fun.ac.jp</li>
+
+	<li ename="" email="b1020226@fun.ac.jp">b1020226@fun.ac.jp</li>
+
+	<li ename="" email="b1020220@fun.ac.jp">b1020220@fun.ac.jp</li>
+
+	<li ename="" email="b1020218@fun.ac.jp">b1020218@fun.ac.jp</li>
+
+	<li ename="" email="b1020214@fun.ac.jp">b1020214@fun.ac.jp</li>
+
+	<li ename="" email="b1020224@fun.ac.jp">b1020224@fun.ac.jp</li>
+
+	<li ename="" email="b1020150@fun.ac.jp">b1020150@fun.ac.jp</li>
+
+	<li ename="Keiji Suzuki" email="kjsuzuki@fun.ac.jp">Keiji Suzuki &lt;kjsuzuki@fun.ac.jp&gt;</li>
+
+	<li ename="" email="b1020232@fun.ac.jp">b1020232@fun.ac.jp</li>
+
+	<li ename="" email="b1020223@fun.ac.jp">b1020223@fun.ac.jp</li>
+
+	<li ename="" email="b1020222@fun.ac.jp">b1020222@fun.ac.jp</li>
+
+	<li ename="" email="b1020213@fun.ac.jp">b1020213@fun.ac.jp</li>
+
+	<li ename="" email="b1020212@fun.ac.jp">b1020212@fun.ac.jp</li>
+
+	<li ename="" email="b1019217@fun.ac.jp">b1019217@fun.ac.jp</li>
+
+	<li ename="" email="career@fun.ac.jp">career@fun.ac.jp</li>
+
+	<li ename="Katsuya MATSUBARA" email="matsu@fun.ac.jp">Katsuya MATSUBARA &lt;matsu@fun.ac.jp&gt;</li>
+
+	<li ename="" email="b1020231@fun.ac.jp">b1020231@fun.ac.jp</li>
+
+	<li ename="" email="b1020229@fun.ac.jp">b1020229@fun.ac.jp</li>
+
+	<li ename="" email="b1020225@fun.ac.jp">b1020225@fun.ac.jp</li>
+
+	<li ename="" email="b1020217@fun.ac.jp">b1020217@fun.ac.jp</li>
+
+	<li ename="" email="b1020215@fun.ac.jp">b1020215@fun.ac.jp</li>
+
+	<li ename="" email="b1018139@fun.ac.jp">b1018139@fun.ac.jp</li>
+
+	<li ename="" email="katori@fun.ac.jp">katori@fun.ac.jp</li>
+
+	<li ename="" email="y-nakamr@fun.ac.jp">y-nakamr@fun.ac.jp</li>
+
+	<li ename="" email="yura@fun.ac.jp">yura@fun.ac.jp</li>
+
+	<li ename="" email="b1017152@fun.ac.jp">b1017152@fun.ac.jp</li>
+
+	<li ename="kameda" email="kameda@fun.ac.jp">kameda &lt;kameda@fun.ac.jp&gt;</li>
+
+	<li ename="公立はこだて未来大学 事務局教務課" email="stu@fun.ac.jp">公立はこだて未来大学 事務局教務課 &lt;stu@fun.ac.jp&gt;</li>
+
+	<li ename="" email="kjsuzuki@fun.ac.jp">kjsuzuki@fun.ac.jp</li>
+
+	<li ename="" email="satonao@fun.ac.jp">satonao@fun.ac.jp</li>
+
+	<li ename="" email="b1019214@fun.ac.jp">b1019214@fun.ac.jp</li>
+
+	<li ename="Daichi koyama" email="b1018240@fun.ac.jp">Daichi koyama &lt;b1018240@fun.ac.jp&gt;</li>
+
+	<li ename="" email="mll-admin@fun.ac.jp">mll-admin@fun.ac.jp</li>
+
+	<li ename="" email="b1019225@fun.ac.jp">b1019225@fun.ac.jp</li>
+
+	<li ename="" email="b1018015@fun.ac.jp">b1018015@fun.ac.jp</li>
+
+	<li ename="" email="b1017009@fun.ac.jp">b1017009@fun.ac.jp</li>
+
+	<li ename="" email="b1017015@fun.ac.jp">b1017015@fun.ac.jp</li>
+
+	<li ename="" email="g2119006@fun.ac.jp">g2119006@fun.ac.jp</li>
+
+	<li ename="" email="b1018106@fun.ac.jp">b1018106@fun.ac.jp</li>
+
+	<li ename="" email="b1017119@fun.ac.jp">b1017119@fun.ac.jp</li>
+
+	<li ename="" email="b1016127@fun.ac.jp">b1016127@fun.ac.jp</li>
+
+	<li ename="" email="b1018034@fun.ac.jp">b1018034@fun.ac.jp</li>
+
+	<li ename="" email="b1019097@fun.ac.jp">b1019097@fun.ac.jp</li>
+
+	<li ename="" email="b1019201@fun.ac.jp">b1019201@fun.ac.jp</li>
+
+	<li ename="Kimura Kenichi" email="kimurakenichi@me.com">Kimura Kenichi &lt;kimurakenichi@me.com&gt;</li>
+
+	<li ename="" email="b1018135@fun.ac.jp">b1018135@fun.ac.jp</li>
+
+	<li ename="" email="b1018135@.fun.ac.jp">b1018135@.fun.ac.jp</li>
+
+	<li ename="" email="s-takagi@fun.ac.jp">s-takagi@fun.ac.jp</li>
+
+	<li ename="" email="b1018219@fun.ac.jp">b1018219@fun.ac.jp</li>
+
+	<li ename="" email="b1018140@fun.ac.jp">b1018140@fun.ac.jp</li>
+
+	<li ename="b1018139" email="b1018139@fun.ac.jp">b1018139 &lt;b1018139@fun.ac.jp&gt;</li>
+
+</ul>
+
+<!-- Auto Save-->
+<div id="asvLoading" style="width: 329px; top: 5px; display: none;">
+	<div class="asvWrap">
+		<div class="left">
+			<img src="./asv_loading.gif" border="0">
+		</div>
+		<div class="left bold asvMacro">自動保存中です。</div>
+	</div>
+</div>
+
+<!-- drag and drop-->
+<div id="dropDiv" class="hide">	<div><p class="dropMsg"></p></div></div>
+<!-- modal window -->
+<div id="modalWrap"></div>
+<div id="modalDiv" class="roundDiv">
+	<div class="roundDiv" style="height:24px;margin:2px;padding:4px;background:url(../images/base/blue/sScroll_bg.gif);">
+		<span id="modalTitle"></span>
+		<span class="right pointer modalClose" onclick="$.modal.close();"></span>
+	</div>
+	<p id="modalMsg"></p>
+	<p class="modalBtns">
+		<span id="modalCallBackYes" class="btn confirmBtn">はい</span>
+		<span id="modalCallBackEtc" class="btn hide">下書きに保存</span>
+		<span id="modalCallBackNo" class="btn confirmBtn">いいえ</span>
+		<span class="btn alertBtn" onclick="$.modal.close();">OK</span>
+	</p>
+</div>
+<!-- send result -->
+<div id="sendResultWrap"></div>
+<div id="sendResult"></div>
+<div id="modifyPopRcpt">
+	<input type="text" id="tempRcpt" autocomplete="off">
+	<input type="hidden" id="curRcptID">
+	<input type="hidden" id="curRcptIndex">
+</div>
+<!-- webfile -->
+<div id="webfileWrap"></div>
+
+<input type="hidden" id="duplto" value="">
+<input type="hidden" id="duplcc" value="">
+<input type="hidden" id="duplbcc" value="">
+<input type="file" id="multiUploadFile" name="upload[]" onchange="MultiUpload(this.files);" multiple="">
+
+</body></html>
