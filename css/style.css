@@ -1,0 +1,60 @@
+@charset "utf-8";
+/*最初の行には文字コードを記述するのが鉄則*/
+body {
+    margin:0;/*余白の初期化*/
+    padding:0;
+    background-color :white;/*背景色の設定*/
+    color:black;/*文字の色の指定*/
+    font-size: 15px;/*文字の大きさ指定*/
+    line-height: 2;/*行間の指定*/
+}
+p,h1,h2,h3,h4,h5,h6 {/**/
+    margin-top:0;/*余白の初期化*/
+}
+img {
+    vertical-align:bottom;/*画像とその下の余白を消す*/
+    /*画像の横の長さを500pxに指定*/
+}
+ul {
+    margin: 0;/*選択項目の余白を初期化*/
+    padding: 0;
+}
+/*カーソルをあわせた時にのみ下線が表される編集の記述*/
+a:visited{
+text-decoration: black;
+}
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration :underline;
+}
+/*ヘッダーのエリアサイズ設定*/
+/* header{
+    width:960px;
+    height:100px;
+    margin:0 auto;
+} */
+
+.logo{/*クラスで定義された場所の編集*/
+    float:left;
+    margin-top:50px;
+}
+.global-nav{/*クラスで定義された場所の編集*/
+    float:right;
+    margin-left:60px;
+}
+.global-nav li{
+    float:left;/*.global-navのところを横並びにしている*/
+    margin:0 20px;/*項目の左右に余白を作る*/
+    font-size:20px;/*文字の大きさを20pxに設定*/
+    list-style:none/*メニュー文字の行頭アイコンの非表示*/
+}
+.photo1{
+    text-align: center;
+}
+.comment{
+    float:right;
+    text-align: right;
+    margin-top: 300px;
+}
