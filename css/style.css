@@ -4,16 +4,16 @@ body {
     margin:0;/*余白の初期化*/
     padding:0;
     background-color :white;/*背景色の設定*/
-    color:black;/*文字の色の指定*/
+    color:white;/*文字の色の指定*/
     font-size: 15px;/*文字の大きさ指定*/
     line-height: 2;/*行間の指定*/
 }
 p,h1,h2,h3,h4,h5,h6 {/**/
     margin-top:0;/*余白の初期化*/
 }
+
 img {
     vertical-align:bottom;/*画像とその下の余白を消す*/
-    /*画像の横の長さを500pxに指定*/
 }
 ul {
     margin: 0;/*選択項目の余白を初期化*/
@@ -21,7 +21,7 @@ ul {
 }
 /*カーソルをあわせた時にのみ下線が表される編集の記述*/
 a:visited{
-text-decoration: black;
+    text-decoration:white;
 }
 a{
     text-decoration: none;
@@ -48,8 +48,30 @@ a:hover{
     float:left;/*.global-navのところを横並びにしている*/
     margin:0 20px;/*項目の左右に余白を作る*/
     font-size:20px;/*文字の大きさを20pxに設定*/
-    list-style:none/*メニュー文字の行頭アイコンの非表示*/
+    list-style:none;/*メニュー文字の行頭アイコンの非表示*/
+    color:white;
 }
+#wrap{/*id属性なら#、class属性なら.を使う　　id属性は個別のものを割り当てることができ、classはまとめて割り当てることができる。*/
+    clear:both; /*clearプロパティはfloatプロパティで左寄せとか、場所が決められてしまった場合の回り込みを解除*/
+}
+/*コンテンツエリアの中央揃え*/
+.content{
+    width:960;
+    margin:0;
+}
+/*フッターのスタイル指定*/
+footer {
+    text-align: center;/*フッターの中の文字を中央揃え*/
+    padding: 20px 0;/*余白の設定*/
+}
+footer small{
+    font-size:12px;/*smallエリアのフォントの大きさ指定*/
+}
+#main {
+background-image:url(../images/背景.png);/*背景画像の設定*/
+/*background-repeat:no-repeat;/*繰り返しなし*/
+}
+
 .photo1{
     text-align: center;
 }

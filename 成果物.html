@@ -6,32 +6,35 @@
         <link href ="css/style.css" rel="stylesheet"><!--Css記述のための文章-->
     </head>
 
-    <body>
+    <body id=main><!--body要素を他のページと区別するための記述(indexの方が良い？それともファイル名？)-->
 
         <header>
             <div class="logo"><!--Cssでロゴを装飾する時の目印-->
-                <a herf="index.html">
-                <img src="images/logo.png" alt="MasPro"><!--画像の挿入のための記述-->
-                </a>
+                <a herf="成果物.html"><img src="images/logo.png" alt="MasPro"><!--画像の挿入のための記述--></a>
             </div>
         </header><!--ページ内上部の表示-->
 
         <nav><!--メニュー作成のための記述-->
             <ul class ="global-nav"><!--CSS作成のための目印作成-->
+                <li><a href="成果物.html">ホーム</li>
                 <li><a href="数学的帰納法.html">数学的帰納法</a></li>
                 <li><a href="微分方程式.html">微分方程式</a></li>
                 <li><a href="積分.html">積分</a></li>
                 <li><a href="数列.html">数列</a></li>
             </ul>
         </nav><!--メニューの設定-->
-
+        
         <div id="wrap"><!--コンテンツエリア(それはなんだ？)-->
             <div class="content"><!--コンテンツエリアの作成-->
+                <h1>数学における記述支援サイト<br>(アプリ名)</h1><!--見出しの作成-->
+                <p>このウェブサイトは<br>マスプロ2020によって作られるウェブサイトです。</p><!--本文の作成-->
+                <p class=btn></p><!--ボタンなどを追加する場合はここに記述する-->
             </div>
         </div>
 
         <footer><!--ページ内下部の表示-->
             <small>(C)2020 マスプロ</small>
+   
             <!--コピーライトの記述を行う。
                 そこまで重要でない情報はsmallタグで囲う-->
         </footer>
